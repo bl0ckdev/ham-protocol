@@ -3,13 +3,13 @@
 
 // Token
 // deployed first
-const HAMImplementation = artifacts.require("HAMDelegate");
-const HAMProxy = artifacts.require("HAMDelegator");
+const SUMOImplementation = artifacts.require("SUMODelegate");
+const SUMOProxy = artifacts.require("SUMODelegator");
 
 // Rs
 // deployed second
-const HAMReserves = artifacts.require("HAMReserves");
-const HAMRebaser = artifacts.require("HAMRebaser");
+const SUMOReserves = artifacts.require("SUMOReserves");
+const SUMORebaser = artifacts.require("SUMORebaser");
 
 // Governance
 // deployed third
@@ -39,6 +39,6 @@ async function deployGovernance(deployer, network) {
   await deployer.deploy(Timelock);
   await deployer.deploy(Gov,
       Timelock.address,
-      HAMProxy.address
+      SUMOProxy.address
   );
 }

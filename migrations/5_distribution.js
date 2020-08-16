@@ -5,29 +5,29 @@ var fs = require('fs')
 
 // Protocol
 // deployed second
-const HAMImplementation = artifacts.require("HAMDelegate");
-const HAMProxy = artifacts.require("HAMDelegator");
+const SUMOImplementation = artifacts.require("SUMODelegate");
+const SUMOProxy = artifacts.require("SUMODelegator");
 
 // deployed third
-const HAMReserves = artifacts.require("HAMReserves");
-const HAMRebaser = artifacts.require("HAMRebaser");
+const SUMOReserves = artifacts.require("SUMOReserves");
+const SUMORebaser = artifacts.require("SUMORebaser");
 
 const Gov = artifacts.require("GovernorAlpha");
 const Timelock = artifacts.require("Timelock");
 
 // deployed fourth
-const HAM_ETHPool = artifacts.require("HAMETHPool");
-const HAM_uAMPLPool = artifacts.require("HAMAMPLPool");
-const HAM_YFIPool = artifacts.require("HAMYFIPool");
-const HAM_LINKPool = artifacts.require("HAMLINKPool");
-const HAM_MKRPool = artifacts.require("HAMMKRPool");
-const HAM_LENDPool = artifacts.require("HAMLENDPool");
-const HAM_COMPPool = artifacts.require("HAMCOMPPool");
-const HAM_SNXPool = artifacts.require("HAMSNXPool");
+const SUMO_ETHPool = artifacts.require("SUMOETHPool");
+const SUMO_uAMPLPool = artifacts.require("SUMOAMPLPool");
+const SUMO_YFIPool = artifacts.require("SUMOYFIPool");
+const SUMO_LINKPool = artifacts.require("SUMOLINKPool");
+const SUMO_MKRPool = artifacts.require("SUMOMKRPool");
+const SUMO_LENDPool = artifacts.require("SUMOLENDPool");
+const SUMO_COMPPool = artifacts.require("SUMOCOMPPool");
+const SUMO_SNXPool = artifacts.require("SUMOSNXPool");
 
 
 // deployed fifth
-const HAMIncentivizer = artifacts.require("HAMIncentivizer");
+const SUMOIncentivizer = artifacts.require("SUMOIncentivizer");
 
 // ============ Main Migration ============
 
@@ -46,31 +46,31 @@ module.exports = migration;
 
 async function deployDistribution(deployer, network, accounts) {
   console.log(network)
-  let ham = await HAMProxy.deployed();
-  let yReserves = await HAMReserves.deployed()
-  let yRebaser = await HAMRebaser.deployed()
+  let sumo = await SUMOProxy.deployed();
+  let yReserves = await SUMOReserves.deployed()
+  let yRebaser = await SUMORebaser.deployed()
   let tl = await Timelock.deployed();
   let gov = await Gov.deployed();
   if (network != "test") {
-    await deployer.deploy(HAM_ETHPool);
-    await deployer.deploy(HAM_uAMPLPool);
-    await deployer.deploy(HAM_YFIPool);
-    await deployer.deploy(HAMIncentivizer);
-    await deployer.deploy(HAM_LINKPool);
-    await deployer.deploy(HAM_MKRPool);
-    await deployer.deploy(HAM_LENDPool);
-    await deployer.deploy(HAM_COMPPool);
-    await deployer.deploy(HAM_SNXPool);
+    await deployer.deploy(SUMO_ETHPool);
+    await deployer.deploy(SUMO_uAMPLPool);
+    await deployer.deploy(SUMO_YFIPool);
+    await deployer.deploy(SUMOIncentivizer);
+    await deployer.deploy(SUMO_LINKPool);
+    await deployer.deploy(SUMO_MKRPool);
+    await deployer.deploy(SUMO_LENDPool);
+    await deployer.deploy(SUMO_COMPPool);
+    await deployer.deploy(SUMO_SNXPool);
 
-    let eth_pool = new web3.eth.Contract(HAM_ETHPool.abi, HAM_ETHPool.address);
-    let ampl_pool = new web3.eth.Contract(HAM_uAMPLPool.abi, HAM_uAMPLPool.address);
-    let yfi_pool = new web3.eth.Contract(HAM_YFIPool.abi, HAM_YFIPool.address);
-    let lend_pool = new web3.eth.Contract(HAM_LENDPool.abi, HAM_LENDPool.address);
-    let mkr_pool = new web3.eth.Contract(HAM_MKRPool.abi, HAM_MKRPool.address);
-    let snx_pool = new web3.eth.Contract(HAM_SNXPool.abi, HAM_SNXPool.address);
-    let comp_pool = new web3.eth.Contract(HAM_COMPPool.abi, HAM_COMPPool.address);
-    let link_pool = new web3.eth.Contract(HAM_LINKPool.abi, HAM_LINKPool.address);
-    let ycrv_pool = new web3.eth.Contract(HAMIncentivizer.abi, HAMIncentivizer.address);
+    let eth_pool = new web3.eth.Contract(SUMO_ETHPool.abi, SUMO_ETHPool.address);
+    let ampl_pool = new web3.eth.Contract(SUMO_uAMPLPool.abi, SUMO_uAMPLPool.address);
+    let yfi_pool = new web3.eth.Contract(SUMO_YFIPool.abi, SUMO_YFIPool.address);
+    let lend_pool = new web3.eth.Contract(SUMO_LENDPool.abi, SUMO_LENDPool.address);
+    let mkr_pool = new web3.eth.Contract(SUMO_MKRPool.abi, SUMO_MKRPool.address);
+    let snx_pool = new web3.eth.Contract(SUMO_SNXPool.abi, SUMO_SNXPool.address);
+    let comp_pool = new web3.eth.Contract(SUMO_COMPPool.abi, SUMO_COMPPool.address);
+    let link_pool = new web3.eth.Contract(SUMO_LINKPool.abi, SUMO_LINKPool.address);
+    let ycrv_pool = new web3.eth.Contract(SUMOIncentivizer.abi, SUMOIncentivizer.address);
 
     console.log("setting distributor");
     await Promise.all([
@@ -92,15 +92,15 @@ async function deployDistribution(deployer, network, accounts) {
     console.log("transfering and notifying");
     console.log("eth");
     await Promise.all([
-      ham.transfer(HAM_ETHPool.address, two_fifty.toString()),
-      ham.transfer(HAM_uAMPLPool.address, two_fifty.toString()),
-      ham.transfer(HAM_YFIPool.address, two_fifty.toString()),
-      ham.transfer(HAM_LENDPool.address, two_fifty.toString()),
-      ham.transfer(HAM_MKRPool.address, two_fifty.toString()),
-      ham.transfer(HAM_SNXPool.address, two_fifty.toString()),
-      ham.transfer(HAM_COMPPool.address, two_fifty.toString()),
-      ham.transfer(HAM_LINKPool.address, two_fifty.toString()),
-      ham._setIncentivizer(HAMIncentivizer.address),
+      sumo.transfer(SUMO_ETHPool.address, two_fifty.toString()),
+      sumo.transfer(SUMO_uAMPLPool.address, two_fifty.toString()),
+      sumo.transfer(SUMO_YFIPool.address, two_fifty.toString()),
+      sumo.transfer(SUMO_LENDPool.address, two_fifty.toString()),
+      sumo.transfer(SUMO_MKRPool.address, two_fifty.toString()),
+      sumo.transfer(SUMO_SNXPool.address, two_fifty.toString()),
+      sumo.transfer(SUMO_COMPPool.address, two_fifty.toString()),
+      sumo.transfer(SUMO_LINKPool.address, two_fifty.toString()),
+      sumo._setIncentivizer(SUMOIncentivizer.address),
     ]);
 
     await Promise.all([
@@ -142,14 +142,14 @@ async function deployDistribution(deployer, network, accounts) {
   }
 
   await Promise.all([
-    ham._setPendingGov(Timelock.address),
+    sumo._setPendingGov(Timelock.address),
     yReserves._setPendingGov(Timelock.address),
     yRebaser._setPendingGov(Timelock.address),
   ]);
 
   await Promise.all([
       tl.executeTransaction(
-        HAMProxy.address,
+        SUMOProxy.address,
         0,
         "_acceptGov()",
         "0x",
@@ -157,7 +157,7 @@ async function deployDistribution(deployer, network, accounts) {
       ),
 
       tl.executeTransaction(
-        HAMReserves.address,
+        SUMOReserves.address,
         0,
         "_acceptGov()",
         "0x",
@@ -165,7 +165,7 @@ async function deployDistribution(deployer, network, accounts) {
       ),
 
       tl.executeTransaction(
-        HAMRebaser.address,
+        SUMORebaser.address,
         0,
         "_acceptGov()",
         "0x",
